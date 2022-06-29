@@ -39,7 +39,9 @@ export default function New() {
     loadClientes();
   }, []);
 
-  async function onSubmit(data) {}
+  async function onSubmit(data) {
+    // const body = {};
+  }
 
   return (
     <div>
@@ -58,7 +60,7 @@ export default function New() {
               <select
                 // value={clienteSelecionado}
                 // onChange={(e) => setClienteSelecionado(e.target.value)}
-                id=""
+                id="clientes.id"
                 {...register("cliente", { required: true })}
               >
                 {clientes.map((item, index) => {
@@ -113,10 +115,8 @@ export default function New() {
             <textarea
               type="text"
               placeholder="Descreva seu problema aqui"
-              value={complemento}
-              onChange={(e) => setComplemento(e.target.value)}
+              {...register("complemento")}
             />
-
             <button type="submit">Registrar</button>
           </form>
         </div>

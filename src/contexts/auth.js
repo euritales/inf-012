@@ -7,62 +7,64 @@ import {
   signInWithEmailAndPassword,
   signOut as logOut,
 } from "firebase/auth";
-// import { useNavigate } from "react-router-dom";
 
 export const AuthContext = createContext();
 
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-
   useEffect(() => {
     function loadUser() {
       const storagedUser = localStorage.getItem("usuarioLogado");
       if (storagedUser) {
         setUser(JSON.parse(storagedUser));
-        //setLoading(true);
+        setLoading(true);
       }
-      //setLoading(false);
+      setLoading(false);
     }
     loadUser();
   }, []);
 
-  async function signUp({ email, password, nome }) {
-    await createUserWithEmailAndPassword(auth, email, password, nome)
-      .then((value) => {
-        setLocalUser(value);
-        setLoading(true);
-        SucessMessage("Usuário Criado");
-        // history("/");
-      })
-      .catch((error) => {
-        if (error.code === "auth/weak-password") {
-          ErrorMessage("Senha Fraca!");
-        } else if (error.code === "auth/email-already-in-use") {
-          ErrorMessage("Email Existente!");
-        } else if (error.code === "auth/invalid-email") {
-          ErrorMessage("Email Inválido!");
-        }
-      });
+  async function signUp(email, password, nome) {
+    const response = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    setLocalUser(response);
+    // .then((value) => {
+    //   setLocalUser(value);
+    //   setLoading(true);
+    //   SucessMessage("Usuário Criado");
+    //   // history("/");
+    // })
+    // .catch((error) => {
+    //   if (error.code === "auth/weak-password") {
+    //     ErrorMessage("Senha Fraca!");
+    //   } else if (error.code === "auth/email-already-in-use") {
+    //     ErrorMessage("Email Existente!");
+    //   } else if (error.code === "auth/invalid-email") {
+    //     ErrorMessage("Email Inválido!");
+    //   }
+    // });
   }
 
   async function signIn(email, password) {
     //Fazer Login no firebase
-    await signInWithEmailAndPassword(auth, email, password)
-      .then(() => {
-        setLoading(true);
-        SucessMessage("Bem-vindo de volta!!");
-        // history("/");
-      })
-      .catch(() => {
-        ErrorMessage("Email/Senha invalidos");
-      });
+    try {
+      const response = await signInWithEmailAndPassword(auth, email, password);
+      setLoading(true);
+      return SucessMessage("Usuario Logado!");
+    } catch (error) {
+      return ErrorMessage(error.code);
+    }
   }
 
   async function signOut() {
     //Fazer logout no firebase
     await logOut(auth).then(() => {
-      // setUser(false);
+      localStorage.removeItem("usuarioLogado");
+      setUser(false);
       SucessMessage("Usuário deslogado!");
       // history("/");
     });
@@ -71,6 +73,12 @@ function AuthProvider({ children }) {
   function setLocalUser(data) {
     localStorage.setItem("usuarioLogado", JSON.stringify(data));
   }
+
+  async function createCliente() {}
+  async function editCliente() {
+    async function editCliente() {}
+  }
+  async function createCliente() {}
 
   async function carregarDados(data) {
     const response = await fetch("http://desafio-m03.herokuapp.com/login", {});

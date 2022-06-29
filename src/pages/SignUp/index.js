@@ -9,16 +9,7 @@ function SignUp() {
   const { register, handleSubmit } = useForm();
 
   async function onSubmit(data) {
-    console.log(data);
-    // const response = await fetch("http://desafio-m03.herokuapp.com/login", {
-    //   method: "POST",
-    //   body: JSON.stringify(data),
-    //   headers: {
-    //     "Content-type": "application/json",
-    //   },
-    // });
-    // const dados = await response.json();
-    // console.log(dados);
+    console.log(data.email, data.senha, data.nome);
     await signUp(data.email, data.senha, data.nome);
   }
 

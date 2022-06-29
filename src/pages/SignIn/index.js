@@ -3,26 +3,23 @@ import logo from "../../assets/login.png";
 import { AuthContext } from "../../contexts/auth";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 
 function SignIn() {
   const { register, handleSubmit } = useForm();
-  const { signIn } = useContext(AuthContext);
+  const { signIn, loading } = useContext(AuthContext);
   const history = useNavigate();
 
+  useEffect(() => {
+    if (localStorage.getItem("usuarioLogado")) {
+      history("/dashboard");
+    } else {
+      history("/");
+    }
+  }, [loading]);
+
   async function onSubmit(data) {
-    console.log(data);
-    await signIn(data.email, data.senha);
-    // const response = await fetch("http://desafio-m03.herokuapp.com/login", {
-    //   method: "POST",
-    //   body: JSON.stringify(data),
-    //   headers: {
-    //     "Content-type": "application/json",
-    //   },
-    // });
-    // const dados = await response.json();
-    // console.log(dados);
-    history("/dashboard");
+    signIn(data.email, data.senha);
   }
 
   return (
@@ -35,7 +32,7 @@ function SignIn() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <h1>Entrar</h1>
           <input
-            type="text"
+            type="email"
             placeholder="email@email.com"
             {...register("email", { required: true })}
           />
