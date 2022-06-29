@@ -11,15 +11,14 @@ function SignIn() {
   const history = useNavigate();
 
   useEffect(() => {
-    if (localStorage.getItem("usuarioLogado")) {
-      history("/dashboard");
-    } else {
-      history("/");
+    const storagedUser = localStorage.getItem("usuarioLogado");
+    if (storagedUser != null) {
+      return history("/dashboard");
     }
-  }, [loading]);
+  }, []);
 
   async function onSubmit(data) {
-    signIn(data.email, data.senha);
+    await signIn(data.email, data.senha);
   }
 
   return (

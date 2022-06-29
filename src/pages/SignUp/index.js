@@ -1,5 +1,5 @@
 import logo from "../../assets/login.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../contexts/auth";
 import { useForm } from "react-hook-form";
@@ -7,9 +7,10 @@ import { useForm } from "react-hook-form";
 function SignUp() {
   const { signUp, loading } = useContext(AuthContext);
   const { register, handleSubmit } = useForm();
+  const history = useNavigate();
 
   async function onSubmit(data) {
-    console.log(data.email, data.senha, data.nome);
+    history("/");
     await signUp(data.email, data.senha, data.nome);
   }
 

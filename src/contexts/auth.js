@@ -13,17 +13,18 @@ export const AuthContext = createContext();
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    function loadUser() {
-      const storagedUser = localStorage.getItem("usuarioLogado");
-      if (storagedUser) {
-        setUser(JSON.parse(storagedUser));
-        setLoading(true);
-      }
-      setLoading(false);
-    }
-    loadUser();
-  }, []);
+
+  // useEffect(() => {
+  //   function loadUser() {
+  //     const storagedUser = localStorage.getItem("usuarioLogado");
+  //     if (storagedUser) {
+  //       setUser(JSON.parse(storagedUser));
+  //       setLoading(true);
+  //     }
+  //     // setLoading(false);
+  //   }
+  //   loadUser();
+  // }, []);
 
   async function signUp(email, password, nome) {
     const response = await createUserWithEmailAndPassword(
@@ -49,14 +50,17 @@ function AuthProvider({ children }) {
     // });
   }
 
-  async function signIn(email, password) {
+  async function signIn(email, senha) {
     //Fazer Login no firebase
+
     try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
+      const response = await signInWithEmailAndPassword(auth, email, senha);
+      setLocalUser(response);
       setLoading(true);
+      setUser(true);
       return SucessMessage("Usuario Logado!");
     } catch (error) {
-      return ErrorMessage(error.code);
+      return ErrorMessage("Email ou senha invalida!");
     }
   }
 
@@ -65,8 +69,8 @@ function AuthProvider({ children }) {
     await logOut(auth).then(() => {
       localStorage.removeItem("usuarioLogado");
       setUser(false);
+      setLoading(false);
       SucessMessage("Usuário deslogado!");
-      // history("/");
     });
   }
 
@@ -105,3 +109,10 @@ function AuthProvider({ children }) {
   );
 }
 export default AuthProvider;
+// await fetch("http://desafio-m03.herokuapp.com/perfil", {
+//   method: "PUT",
+//   body: JSON.stringify(data),
+//   headers: {
+//     "Content-type": "application/json",
+//   },
+// });

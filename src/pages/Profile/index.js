@@ -20,22 +20,22 @@ export default function Profile() {
   async function handleSave(e) {}
   async function handleUpload() {}
 
-  useEffect(() => {
-    async function carregarDado() {
-      const response = await fetch("http://desafio-m03.herokuapp.com/perfil", {
-        method: "GET",
-      });
-      const dados = await response.json();
-      // setValue("nome", dados.nome);
-      // setValue("imagem", dados.avatarUrl);
-      // setValue("email", dados.email);
-      console.log(dados);
-    }
-    carregarDado();
-  }, []);
+  // useEffect(() => {
+  //   async function carregarDado() {
+  //     const response = await fetch("http://desafio-m03.herokuapp.com/perfil", {
+  //       method: "GET",
+  //     });
+  //     const dados = await response.json();
+  //     // setValue("nome", dados.nome);
+  //     // setValue("imagem", dados.avatarUrl);
+  //     // setValue("email", dados.email);
+  //     console.log(dados);
+  //   }
+  //   carregarDado();
+  // }, []);
 
   useEffect(() => {
-    async function loadUser() {
+    function loadUser() {
       // devo consumir do get que será feito para inserir valores antigos do usuário
       setValue("nome", "Manuel");
       setValue("imagem", "avatar");
@@ -43,21 +43,20 @@ export default function Profile() {
       // setValue("imagem", "dados.avatarURL");
     }
     loadUser();
-  });
+  }, []);
+
+  useEffect(() => {
+    const storagedUser = localStorage.getItem("usuarioLogado");
+    if (storagedUser == null) {
+      return history("/dashboard");
+    }
+  }, []);
 
   async function onSubmit(data) {
     // const dadosAtualizados = Object.fromEntries(
     //   Object.entries(data).filter(([, value]) => value)
     // ); --  APAGAR --
-
     //requisição
-    await fetch("http://desafio-m03.herokuapp.com/perfil", {
-      method: "PUT",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-type": "application/json",
-      },
-    });
   }
 
   return (
@@ -112,7 +111,6 @@ export default function Profile() {
             className="logout-btn"
             onClick={() => {
               signOut();
-              history("/");
             }}
           >
             Sair
