@@ -5,14 +5,15 @@ import Title from "../../components/Title";
 import avatar from "../../assets/avatar.png";
 import { AuthContext } from "../../contexts/auth";
 import { FiSettings, FiUpload } from "react-icons/fi";
-import firebase from "../../services/firebaseConnection";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import firebase from "../../services/firebaseConnection";
 import { async } from "@firebase/util";
+import SucessMessage from "../../components/ToastifyPopups/sucessMessage";
 
 export default function Profile() {
   const { register, setValue, handleSubmit } = useForm();
-  const { user, signOut, setUser, setLocalUser } = useContext(AuthContext);
+  const { user, signOut, token } = useContext(AuthContext);
   const [avatarUrl, setAvatarUrl] = useState(user && user.avatarUrl);
   const history = useNavigate();
 
@@ -20,26 +21,20 @@ export default function Profile() {
   async function handleSave(e) {}
   async function handleUpload() {}
 
-  // useEffect(() => {
-  //   async function carregarDado() {
-  //     const response = await fetch("http://desafio-m03.herokuapp.com/perfil", {
-  //       method: "GET",
-  //     });
-  //     const dados = await response.json();
-  //     // setValue("nome", dados.nome);
-  //     // setValue("imagem", dados.avatarUrl);
-  //     // setValue("email", dados.email);
-  //     console.log(dados);
-  //   }
-  //   carregarDado();
-  // }, []);
+  async function handleSignOut(e) {
+    signOut().then(() => {
+      if (!token) {
+        return history("/");
+      }
+    });
+  }
 
   useEffect(() => {
     function loadUser() {
       // devo consumir do get que será feito para inserir valores antigos do usuário
-      setValue("nome", "Manuel");
+      setValue("nome", "Manoel");
       setValue("imagem", "avatar");
-      setValue("email", "Manel@ifba.com");
+      setValue("email", "Maneol@ifba.com");
       // setValue("imagem", "dados.avatarURL");
     }
     loadUser();
@@ -52,12 +47,7 @@ export default function Profile() {
     }
   }, []);
 
-  async function onSubmit(data) {
-    // const dadosAtualizados = Object.fromEntries(
-    //   Object.entries(data).filter(([, value]) => value)
-    // ); --  APAGAR --
-    //requisição
-  }
+  async function onSubmit(data) {}
 
   return (
     <div>
@@ -73,11 +63,7 @@ export default function Profile() {
                 <FiUpload color="#000" size={25} />
               </span>
 
-              <input
-                type="file"
-                accept="image/*"
-                // onChange={handleFile}
-              />
+              <input type="file" accept="image/*" />
               <br />
               {avatarUrl === null ? (
                 <img
@@ -109,8 +95,8 @@ export default function Profile() {
         <div className="container">
           <button
             className="logout-btn"
-            onClick={() => {
-              signOut();
+            onClick={(e) => {
+              handleSignOut(e);
             }}
           >
             Sair

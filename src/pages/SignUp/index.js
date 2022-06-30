@@ -5,7 +5,7 @@ import { AuthContext } from "../../contexts/auth";
 import { useForm } from "react-hook-form";
 
 function SignUp() {
-  const { signUp, loading } = useContext(AuthContext);
+  const { signUp } = useContext(AuthContext);
   const { register, handleSubmit } = useForm();
   const history = useNavigate();
 
@@ -13,7 +13,6 @@ function SignUp() {
     history("/");
     await signUp(data.email, data.senha, data.nome);
   }
-
   return (
     <div className="conteiner-center">
       <div className="login">

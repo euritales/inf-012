@@ -21,6 +21,7 @@ export default function New() {
 
   useEffect(() => {
     async function loadClientes() {
+      //api usada para teste
       try {
         const response = await fetch(
           "http://desafio-m03.herokuapp.com/clientes",
@@ -58,8 +59,6 @@ export default function New() {
               <input type="text" value="Carregando..." />
             ) : (
               <select
-                // value={clienteSelecionado}
-                // onChange={(e) => setClienteSelecionado(e.target.value)}
                 id="clientes.id"
                 {...register("cliente", { required: true })}
               >

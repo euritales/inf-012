@@ -3,19 +3,18 @@ import logo from "../../assets/login.png";
 import { AuthContext } from "../../contexts/auth";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useState, useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 
 function SignIn() {
   const { register, handleSubmit } = useForm();
-  const { signIn, loading } = useContext(AuthContext);
+  const { signIn, loading, token } = useContext(AuthContext);
   const history = useNavigate();
 
   useEffect(() => {
-    const storagedUser = localStorage.getItem("usuarioLogado");
-    if (storagedUser != null) {
+    if (token) {
       return history("/dashboard");
     }
-  }, []);
+  });
 
   async function onSubmit(data) {
     await signIn(data.email, data.senha);
